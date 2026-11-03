@@ -55,11 +55,12 @@ a{color:var(--em)}
 </style>
 </head>
 <body>
-<div class="lg" id="lg"><form id="lf"><h1 class="logo" style="font-size:1.8rem">HASAN’s COLLECTION<small>STAFF</small></h1><p>Enter the staff password to see orders.</p><input id="pw" type="password" autocomplete="current-password" aria-label="Staff password" placeholder="Password" autofocus><p class="er" id="le" role="alert" hidden>Wrong password. Try again.</p><button class="btn" type="submit">Open orders</button></form></div>
+<div class="lg" id="lg"><form id="lf"><h1 class="logo" style="font-size:1.8rem">HASAN’s COLLECTION<small>STAFF</small></h1><p id="lp">Sign in with your staff account to see orders.</p><input id="em" type="email" autocomplete="username" aria-label="Staff email" placeholder="Staff email" required><input id="pw" type="password" autocomplete="current-password" aria-label="Staff password" placeholder="Password" required><p class="er" id="le" role="alert" hidden>Wrong email or password. Try again.</p><button class="btn" type="submit" id="lb">Open orders</button></form></div>
 <div id="app" hidden>
 <header class="top"><div class="in"><span class="logo">HASAN’s<small>ORDERS</small></span><div class="tl"><button class="ib" id="th" type="button"></button><button class="btn line" id="lo" type="button">Log out</button></div></div></header>
 <main class="wrap">
 <div class="dm" id="dm" hidden>Demo mode: Firebase is not connected, so you only see orders placed in this browser. Paste your Firebase config in <b>firebase-config.js</b> to receive real orders.</div>
+<div class="dm" id="ok" hidden>Live: connected to Firebase project <b id="pj"></b>. New orders appear here instantly.</div>
 <div class="dm er" id="fe" hidden>Could not load orders. Check your Firebase config and Firestore rules, then reload.</div>
 <div class="st" id="st"></div>
 <div class="fl" id="fl"></div>
@@ -67,7 +68,7 @@ a{color:var(--em)}
 </main></div>
 <script type="module">
 import { STAFF_PASSWORD } from "./firebase-config.js";
-import { watchOrders, setStatus, isDemo } from "./db.js";
+import { watchOrders, setStatus, isDemo, projectId, signIn, signOutStaff, onStaff } from "./db.js";
 const $ = s => document.querySelector(s), R = document.documentElement;
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const money = n => "Rs " + Number(n || 0).toLocaleString("en-US");
@@ -80,14 +81,33 @@ try { const t = localStorage.getItem("hc-theme"); if (t) R.dataset.theme = t; } 
 paint();
 $("#th").onclick = () => { const t = dark() ? "light" : "dark"; R.dataset.theme = t; try { localStorage.setItem("hc-theme", t); } catch (e) {} paint(); };
 /* login */
-const open = () => { $("#lg").hidden = true; $("#app").hidden = false; if (started) return; started = true; $("#dm").hidden = !isDemo; watchOrders(o => { orders = o; draw(); }, () => { $("#fe").hidden = false; }); };
-$("#lf").onsubmit = e => {
-  e.preventDefault();
-  if ($("#pw").value === STAFF_PASSWORD) { try { sessionStorage.setItem("hc-staff", "1"); } catch (x) {} open(); }
-  else { $("#le").hidden = false; $("#pw").select(); }
+const FERR = e => e && e.code === "permission-denied" ? "This account is not allowed to see orders. Add its email to the isStaff() list in the Firestore rules." : "Could not load orders. Check your Firebase config and Firestore rules, then reload.";
+const open = () => {
+  $("#lg").hidden = true; $("#app").hidden = false;
+  if (started) return; started = true;
+  $("#dm").hidden = !isDemo; $("#ok").hidden = isDemo; $("#pj").textContent = projectId || "";
+  watchOrders(o => { orders = o; $("#fe").hidden = true; draw(); }, e => { $("#fe").textContent = FERR(e); $("#fe").hidden = false; $("#ok").hidden = true; });
 };
-$("#lo").onclick = () => { try { sessionStorage.removeItem("hc-staff"); } catch (x) {} location.reload(); };
-try { if (sessionStorage.getItem("hc-staff")) open(); } catch (e) {}
+if (isDemo) {
+  $("#em").hidden = true; $("#em").required = false;
+  $("#lp").textContent = "Demo mode: enter the demo password. Connect Firebase to use real staff accounts.";
+  $("#lf").onsubmit = e => {
+    e.preventDefault();
+    if ($("#pw").value === STAFF_PASSWORD) { try { sessionStorage.setItem("hc-staff", "1"); } catch (x) {} open(); }
+    else { $("#le").hidden = false; $("#pw").select(); }
+  };
+  $("#lo").onclick = () => { try { sessionStorage.removeItem("hc-staff"); } catch (x) {} location.reload(); };
+  try { if (sessionStorage.getItem("hc-staff")) open(); } catch (e) {}
+} else {
+  $("#lf").onsubmit = async e => {
+    e.preventDefault(); $("#le").hidden = true; $("#lb").disabled = true; $("#lb").textContent = "Signing in…";
+    try { await signIn($("#em").value.trim(), $("#pw").value); }
+    catch (x) { $("#le").textContent = ["auth/network-request-failed"].includes(x.code) ? "No internet connection. Try again." : "Wrong email or password. Try again."; $("#le").hidden = false; $("#pw").select(); }
+    $("#lb").disabled = false; $("#lb").textContent = "Open orders";
+  };
+  $("#lo").onclick = async () => { await signOutStaff(); location.reload(); };
+  onStaff(u => { if (u) open(); else { $("#app").hidden = true; $("#lg").hidden = false; } }).catch(() => { $("#le").textContent = "Could not reach Firebase. Check firebase-config.js."; $("#le").hidden = false; });
+}
 /* list */
 const card = o => {
   const c = o.customer || {}, p = o.payment || {}, d = new Date(o.createdAt);
