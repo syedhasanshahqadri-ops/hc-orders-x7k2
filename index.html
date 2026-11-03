@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@500;700&family=Jost:wght@400;500;600&display=swap">
+<title>Staff orders | HASAN’s COLLECTION</title>
+<style>
+:root{--bg:#F0F3EF;--sf:#fff;--tx:#14211C;--mu:#58665F;--ln:rgba(20,33,28,.14);--em:#0B6B57;--gd:#A87A1F;--on:#fff;--rd:#B3261E;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0D1613;--sf:#15221D;--tx:#EBEFEA;--mu:#93A29B;--ln:rgba(235,239,234,.15);--em:#34BE9B;--gd:#E2B656;--on:#06201A;--rd:#FF8A80;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0D1613;--sf:#15221D;--tx:#EBEFEA;--mu:#93A29B;--ln:rgba(235,239,234,.15);--em:#34BE9B;--gd:#E2B656;--on:#06201A;--rd:#FF8A80;color-scheme:dark}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font:400 1rem/1.5 Jost,system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+h1,h2,h3,.logo{font-family:"Bodoni Moda",Didot,serif;font-weight:700;line-height:1.1}
+:focus-visible{outline:3px solid var(--em);outline-offset:2px}
+[hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
+.btn{padding:11px 20px;border-radius:999px;border:0;background:var(--em);color:var(--on);font-weight:600;cursor:pointer}
+.btn.line{background:transparent;box-shadow:inset 0 0 0 1.5px var(--tx);color:var(--tx)}
+.ib{width:42px;height:42px;border-radius:50%;border:1px solid var(--ln);background:var(--sf);cursor:pointer}
+input,select{padding:11px 14px;border:1px solid var(--ln);border-radius:10px;background:var(--sf);width:100%}
+.lg{min-height:100vh;display:grid;place-items:center;padding:24px}
+.lg form{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:34px;width:min(100%,380px);display:grid;gap:16px}
+.lg p{color:var(--mu)}.er{color:var(--rd);font-weight:500}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--ln)}
+.top .in,.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.top .in{display:flex;align-items:center;justify-content:space-between;gap:12px;height:68px}
+.logo{font-size:1.3rem}.logo small{font:500 .75rem Jost;letter-spacing:.25em;color:var(--gd);margin-left:6px}
+.tl{display:flex;gap:8px;align-items:center}
+.wrap{padding-top:26px;padding-bottom:70px}
+.dm{background:var(--sf);border:1px solid var(--gd);border-radius:10px;padding:12px 16px;margin-bottom:18px}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.st div{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:14px 18px}
+.st b{display:block;font:700 1.7rem "Bodoni Moda",serif}.st span{color:var(--mu);font-size:.92rem}
+.fl{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
+.fl input{max-width:280px}
+.tb{padding:8px 16px;border-radius:999px;border:1px solid var(--ln);background:var(--sf);cursor:pointer}
+.tb.on{background:var(--em);color:var(--on);border-color:var(--em)}
+.od{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:22px;margin-bottom:16px;display:grid;gap:16px}
+.od header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.od h3{font-size:1.25rem}.mu{color:var(--mu);font-size:.92rem}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.g h4{font-size:.9rem;color:var(--gd);margin-bottom:6px}
+.g p,.g li{overflow-wrap:anywhere}
+ul{list-style:none;display:grid;gap:4px}
+.bd{display:inline-block;padding:3px 12px;border-radius:999px;font-size:.85rem;font-weight:600;background:var(--ln)}
+.bd.New{background:var(--gd);color:#fff}.bd.Delivered{background:var(--em);color:var(--on)}.bd.Cancelled{color:var(--rd)}
+.tt{display:flex;justify-content:space-between;border-top:1px solid var(--ln);padding-top:12px;flex-wrap:wrap;gap:12px;align-items:center}
+.tt select{width:auto}.tt b{font-size:1.2rem}
+.sh{max-width:100%;max-height:180px;border-radius:8px;border:1px solid var(--ln);cursor:zoom-in;margin-top:6px}
+.em{text-align:center;color:var(--mu);padding:60px 0}
+a{color:var(--em)}
+</style>
+</head>
+<body>
+<div class="lg" id="lg"><form id="lf"><h1 class="logo" style="font-size:1.8rem">HASAN’s COLLECTION<small>STAFF</small></h1><p>Enter the staff password to see orders.</p><input id="pw" type="password" autocomplete="current-password" aria-label="Staff password" placeholder="Password" autofocus><p class="er" id="le" role="alert" hidden>Wrong password. Try again.</p><button class="btn" type="submit">Open orders</button></form></div>
+<div id="app" hidden>
+<header class="top"><div class="in"><span class="logo">HASAN’s<small>ORDERS</small></span><div class="tl"><button class="ib" id="th" type="button"></button><button class="btn line" id="lo" type="button">Log out</button></div></div></header>
+<main class="wrap">
+<div class="dm" id="dm" hidden>Demo mode: Firebase is not connected, so you only see orders placed in this browser. Paste your Firebase config in <b>firebase-config.js</b> to receive real orders.</div>
+<div class="dm er" id="fe" hidden>Could not load orders. Check your Firebase config and Firestore rules, then reload.</div>
+<div class="st" id="st"></div>
+<div class="fl" id="fl"></div>
+<div id="ls"></div>
+</main></div>
+<script type="module">
+import { STAFF_PASSWORD } from "./firebase-config.js";
+import { watchOrders, setStatus, isDemo } from "./db.js";
+const $ = s => document.querySelector(s), R = document.documentElement;
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const money = n => "Rs " + Number(n || 0).toLocaleString("en-US");
+const STATUS = ["New", "Confirmed", "Shipped", "Delivered", "Cancelled"];
+let orders = [], tab = "All", q = "", started = false;
+/* theme */
+const dark = () => (R.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark";
+const paint = () => { $("#th").textContent = dark() ? "☀" : "☾"; $("#th").setAttribute("aria-label", dark() ? "Switch to light theme" : "Switch to dark theme"); };
+try { const t = localStorage.getItem("hc-theme"); if (t) R.dataset.theme = t; } catch (e) {}
+paint();
+$("#th").onclick = () => { const t = dark() ? "light" : "dark"; R.dataset.theme = t; try { localStorage.setItem("hc-theme", t); } catch (e) {} paint(); };
+/* login */
+const open = () => { $("#lg").hidden = true; $("#app").hidden = false; if (started) return; started = true; $("#dm").hidden = !isDemo; watchOrders(o => { orders = o; draw(); }, () => { $("#fe").hidden = false; }); };
+$("#lf").onsubmit = e => {
+  e.preventDefault();
+  if ($("#pw").value === STAFF_PASSWORD) { try { sessionStorage.setItem("hc-staff", "1"); } catch (x) {} open(); }
+  else { $("#le").hidden = false; $("#pw").select(); }
+};
+$("#lo").onclick = () => { try { sessionStorage.removeItem("hc-staff"); } catch (x) {} location.reload(); };
+try { if (sessionStorage.getItem("hc-staff")) open(); } catch (e) {}
+/* list */
+const card = o => {
+  const c = o.customer || {}, p = o.payment || {}, d = new Date(o.createdAt);
+  return `<article class="od"><header><div><h3>${esc(o.orderNo)}</h3><span class="mu">${d.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}</span></div><span class="bd ${esc(o.status)}">${esc(o.status)}</span></header>
+<div class="g"><div><h4>Customer</h4><p><b>${esc(c.name)}</b></p><p><a href="tel:${esc(c.phone)}">${esc(c.phone)}</a> · <a href="https://wa.me/92${esc(String(c.phone).replace(/\D/g, "").replace(/^0/, ""))}" target="_blank" rel="noopener">WhatsApp</a></p><p><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></p></div>
+<div><h4>Delivery address</h4><p>${esc(c.address)}</p><p>${esc(c.city)}${c.postal ? ", " + esc(c.postal) : ""}</p>${c.notes ? `<p class="mu">Note: ${esc(c.notes)}</p>` : ""}</div>
+<div><h4>Payment</h4><p><b>${esc(p.method)}</b>${p.method === "Cash on delivery" ? ` · collect ${money(o.total)}` : ""}</p>${p.txnId ? `<p>Transaction ID: <b>${esc(p.txnId)}</b></p>` : ""}${/^data:image\/(jpeg|png);base64,[A-Za-z0-9+\/=]+$/.test(p.screenshot || "") ? `<img class="sh" src="${esc(p.screenshot)}" alt="Payment screenshot for ${esc(o.orderNo)}" data-z="1">` : ""}</div>
+<div><h4>Items</h4><ul>${(o.items || []).map(i => `<li>${esc(i.name)} (${esc(i.season)}) × ${i.qty} = ${money(i.qty * i.price)}</li>`).join("")}</ul></div></div>
+<div class="tt"><span class="mu">Subtotal ${money(o.subtotal)}${o.codFee ? " + COD fee " + money(o.codFee) : ""}</span><b>Total ${money(o.total)}</b><label class="mu">Status <select data-s="${esc(o.id)}" aria-label="Order status for ${esc(o.orderNo)}">${STATUS.map(s => `<option${s === o.status ? " selected" : ""}>${s}</option>`).join("")}</select></label></div></article>`;
+};
+function draw() {
+  const n = s => orders.filter(o => o.status === s).length, rev = orders.filter(o => o.status !== "Cancelled").reduce((a, o) => a + (o.total || 0), 0);
+  $("#st").innerHTML = `<div><b>${orders.length}</b><span>All orders</span></div><div><b>${n("New")}</b><span>New, need action</span></div><div><b>${n("Shipped")}</b><span>Shipped</span></div><div><b>${money(rev)}</b><span>Order value, not cancelled</span></div>`;
+  $("#fl").innerHTML = ["All", ...STATUS].map(t => `<button class="tb${t === tab ? " on" : ""}" data-t="${t}" type="button">${t}</button>`).join("") + `<input id="sq" type="search" placeholder="Search name, phone, order no" aria-label="Search orders" value="${esc(q)}">`;
+  const s = q.toLowerCase(), list = orders.filter(o => (tab === "All" || o.status === tab) && (!s || JSON.stringify([o.orderNo, o.customer]).toLowerCase().includes(s)));
+  $("#ls").innerHTML = list.length ? list.map(card).join("") : `<p class="em">${orders.length ? "No orders match this filter." : "No orders yet. New orders appear here as soon as customers place them."}</p>`;
+  document.title = (n("New") ? `(${n("New")}) ` : "") + "Staff orders | HASAN’s COLLECTION";
+  const i = $("#sq"); if (i && q) { i.focus(); i.setSelectionRange(q.length, q.length); }
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-t]"), z = e.target.closest("[data-z]");
+  if (t) { tab = t.dataset.t; draw(); }
+  if (z) open2(z.src);
+});
+document.addEventListener("input", e => { if (e.target.id === "sq") { q = e.target.value.trim(); draw(); } });
+document.addEventListener("change", e => { if (e.target.dataset.s) setStatus(e.target.dataset.s, e.target.value).catch(() => { $("#fe").hidden = false; }); });
+const open2 = src => { const w = window.open(); if (!w) return; const m = w.document.createElement("img"); m.src = src; m.style.cssText = "max-width:100%;display:block;margin:auto"; w.document.title = "Payment screenshot"; w.document.body.style.cssText = "margin:0;background:#000"; w.document.body.append(m); };
+</script>
+</body>
+</html>
