@@ -1,11 +1,10 @@
-// Use the SAME Firebase config as the customer website.
-// Until it is filled in, this page runs in demo mode and cannot see real customer orders.
+// Firebase web app config for project hasans-collection. Must be identical in the customer website.
 export const firebaseConfig = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_PROJECT_ID.appspot.com",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyAnprVDlDox1EsIr3P4B3O2-wX1Oso3a0U",
+  authDomain: "hasans-collection.firebaseapp.com",
+  projectId: "hasans-collection",
+  storageBucket: "hasans-collection.firebasestorage.app",
+  messagingSenderId: "1043938729152",
+  appId: "1:1043938729152:web:569f02dbb29d1c6843e125"
 };
 export const STAFF_PASSWORD = "hasan";
